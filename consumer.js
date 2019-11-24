@@ -1,13 +1,15 @@
 const Kafka = require('node-rdkafka');
+require("dotenv").config()
+
 
 function createConsumer(onData) {
     const consumer = new Kafka.KafkaConsumer({
-        'bootstrap.servers': 'pkc-41973.westus2.azure.confluent.cloud:9092',
+        'bootstrap.servers': process.env.KAFKA_URI,
         'security.protocol': 'SASL_SSL',
         'sasl.mechanisms': 'PLAIN',
-        'sasl.username': '5X3WCHM645QMDBLS',
-        'sasl.password': 'JFr40oqZpOfGWNYZm9f1sGj8rU/YHDXF+Vws3xYhIjrIV5QLkL6Rq2aj8IC7Vtbq',
-        'group.id': 'rocketseat-consumer-group'
+        'sasl.username': process.env.KAFKA_KEY,
+        'sasl.password': process.env.KAFKA_SECRET,
+        'group.id': process.env.KAFKA_CONSUMER_GROUP
     }, {
         'auto.offset.reset': 'earliest'
     });
@@ -27,7 +29,6 @@ function createConsumer(onData) {
         console.log(`Consumed record with key ${key} and value ${value} of partition ${partition} @ offset ${offset}.`);
     });
 
-    consumer.subscribe(['rocketseat-topic']);
+    consumer.subscribe([process.env.KAFKA_TOPIC]);
     consumer.consume();
-
 })();

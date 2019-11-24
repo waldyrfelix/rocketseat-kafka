@@ -1,16 +1,15 @@
 const Kafka = require('node-rdkafka');
-/**
- * key: 5X3WCHM645QMDBLS
- * secret: JFr40oqZpOfGWNYZm9f1sGj8rU/YHDXF+Vws3xYhIjrIV5QLkL6Rq2aj8IC7Vtbq
- */
+require("dotenv").config()
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function createProducer(onDeliveryReport) {
     const producer = new Kafka.Producer({
-        'bootstrap.servers': 'pkc-41973.westus2.azure.confluent.cloud:9092',
+        'bootstrap.servers': process.env.KAFKA_URI,
         'security.protocol': 'SASL_SSL',
         'sasl.mechanisms': 'PLAIN',
-        'sasl.username': '5X3WCHM645QMDBLS',
-        'sasl.password': 'JFr40oqZpOfGWNYZm9f1sGj8rU/YHDXF+Vws3xYhIjrIV5QLkL6Rq2aj8IC7Vtbq',
+        'sasl.username': process.env.KAFKA_KEY,
+        'sasl.password': process.env.kAFKA_SECRET,
         'dr_msg_cb': true
     });
 
@@ -35,7 +34,7 @@ function createProducer(onDeliveryReport) {
 (async () => {
     const producer = await createProducer((err, report) => {
         console.log("producer report");
-        
+
         if (err) {
             console.error(err);
         } else {
@@ -54,7 +53,9 @@ function createProducer(onDeliveryReport) {
         }
 
         const messageValue = Buffer.from(JSON.stringify(data))
-        producer.produce("rocketseat-topic", 0, messageValue)
+        producer.produce(process.env.KAFKA_TOPIC, 0, messageValue)
+
+        await sleep(1000)
     }
 
 })();
