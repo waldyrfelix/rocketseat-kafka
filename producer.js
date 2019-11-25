@@ -13,7 +13,7 @@ function createProducer(onDeliveryReport) {
         'dr_msg_cb': true
     });
 
-    console.log("producer");
+    producer.setPollInterval(100);
 
 
     return new Promise((resolve, reject) => {
@@ -33,8 +33,6 @@ function createProducer(onDeliveryReport) {
 
 (async () => {
     const producer = await createProducer((err, report) => {
-        console.log("producer report");
-
         if (err) {
             console.error(err);
         } else {

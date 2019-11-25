@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "kafka-node": "^5.0.0",
     "node-rdkafka": "^2.7.4"
+  },
+  "config": {
+    "unsafe-perm": true
   }
 }

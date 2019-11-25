@@ -1,7 +1,6 @@
 const Kafka = require('node-rdkafka');
 require("dotenv").config()
 
-
 function createConsumer(onData) {
     const consumer = new Kafka.KafkaConsumer({
         'bootstrap.servers': process.env.KAFKA_URI,
@@ -23,10 +22,11 @@ function createConsumer(onData) {
     });
 }
 
-
 (async () => {
     const consumer = await createConsumer(({ key, value, partition, offset }) => {
-        console.log(`Consumed record with key ${key} and value ${value} of partition ${partition} @ offset ${offset}.`);
+        console.log(`Message at offset ${offset}.`);
+        console.log(`Consumed record ${value} of partition ${partition}.`);
+        console.log();
     });
 
     consumer.subscribe([process.env.KAFKA_TOPIC]);
